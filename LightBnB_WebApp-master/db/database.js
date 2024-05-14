@@ -8,10 +8,6 @@ const pool = new Pool({
   database: "lightbnb",
 });
 
-// Connection Test
-// pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)})
-
-
 /// Users
 
   // Get a single user from database, given their email
@@ -21,7 +17,6 @@ const getUserWithEmail = (email) => {
     .query('SELECT id, name, email, password FROM users WHERE email = $1', [email])
     .then((result) => {
       if (result.rows.length > 0) {
-        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -40,7 +35,6 @@ const getUserWithId = (id) => {
     .query('SELECT id, name, email, password FROM users WHERE id = $1', [id])
     .then((result) => {
       if (result.rows.length > 0) {
-        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -63,7 +57,6 @@ const addUser = (user) => {
     .query('INSERT INTO users(name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, password])
     .then((result) => {
       if (result.rows.length > 0) {
-        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -83,9 +76,10 @@ const getAllReservations = (guest_id, limit = 10) => {
   return pool
     .query(
     `
-    SELECT reservations.*, properties.*
+    SELECT reservations.*, properties.*, avg(property_reviews.rating) as average_rating
     FROM reservations
     JOIN properties ON reservations.property_id = properties.id
+    JOIN property_reviews ON properties.id = property_reviews.property_id
     WHERE reservations.guest_id = $1
     GROUP BY properties.id, reservations.id
     ORDER BY reservations.start_date
@@ -181,8 +175,6 @@ const getAllProperties = function(options, limit = 10) {
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
-
-  // console.log(queryString, queryParams);
   
   return pool.query(queryString, queryParams).then((res) => res.rows);
 };
@@ -215,7 +207,6 @@ const addProperty = (property) => {
   return pool.query(queryString, queryParams)
     .then((result) => {
       if (result.rows.length > 0) {
-        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
