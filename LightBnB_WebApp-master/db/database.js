@@ -21,7 +21,7 @@ const getUserWithEmail = (email) => {
     .query('SELECT id, name, email, password FROM users WHERE email = $1', [email])
     .then((result) => {
       if (result.rows.length > 0) {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -40,7 +40,7 @@ const getUserWithId = (id) => {
     .query('SELECT id, name, email, password FROM users WHERE id = $1', [id])
     .then((result) => {
       if (result.rows.length > 0) {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -63,7 +63,7 @@ const addUser = (user) => {
     .query('INSERT INTO users(name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, password])
     .then((result) => {
       if (result.rows.length > 0) {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
@@ -138,7 +138,6 @@ const getAllProperties = function(options, limit = 10) {
     }
 
   }
-  console.log(options);
   
     // When user inputs  minimum_price_per_night and a maximum_price_per_night, 
     // returning properties within that price range using WHERE/AND clause.
@@ -183,7 +182,7 @@ const getAllProperties = function(options, limit = 10) {
   LIMIT $${queryParams.length};
   `;
 
-  console.log(queryString, queryParams);
+  // console.log(queryString, queryParams);
   
   return pool.query(queryString, queryParams).then((res) => res.rows);
 };
@@ -216,7 +215,7 @@ const addProperty = (property) => {
   return pool.query(queryString, queryParams)
     .then((result) => {
       if (result.rows.length > 0) {
-        console.log(result.rows[0]);
+        // console.log(result.rows[0]);
         return result.rows[0];
       } else {
         return null;
